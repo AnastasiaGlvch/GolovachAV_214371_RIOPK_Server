@@ -29,7 +29,7 @@ class AuthMiddleware {
             ResponseUtil::unauthorized('Invalid or expired token');
         }
         
-        // Check if user exists and is active
+        
         $userModel = new User();
         $user = $userModel->getById($userData['id']);
         
@@ -41,7 +41,7 @@ class AuthMiddleware {
             ResponseUtil::unauthorized('Account is inactive');
         }
         
-        // Check if user has required role
+      
         if ($allowedRoles !== null && !in_array($userData['role'], $allowedRoles)) {
             ResponseUtil::forbidden('You do not have permission to access this resource');
         }

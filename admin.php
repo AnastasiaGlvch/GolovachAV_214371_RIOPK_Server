@@ -400,7 +400,7 @@ $(document).ready(function() {
             active: active
         };
         
-        // Добавляем пароль, если он заполнен или это новый пользователь
+       
         if (password || !isEdit) {
             userData.password = password;
         }
@@ -411,13 +411,13 @@ $(document).ready(function() {
             return;
         }
         
-        // URL и метод запроса зависят от операции (добавление или редактирование)
+       
         const url = isEdit ? 
             'services/auth/api/users/user.php?id=' + userId : 
             'services/auth/api/users/index.php';
         const method = isEdit ? 'PUT' : 'POST';
         
-        // Очищаем предыдущие ошибки
+       
         $('#user-form-error').addClass('d-none').text('');
         
         // Выполняем запрос к API
@@ -456,8 +456,7 @@ $(document).ready(function() {
             }
         });
     });
-    
-    // Функция для перевода названия роли
+     // Функция для перевода названия роли
     function translateRole(role) {
         const translations = {
             administrator: 'Администратор',

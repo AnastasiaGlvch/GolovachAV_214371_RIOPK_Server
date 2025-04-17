@@ -49,7 +49,7 @@ class Role {
         $check->execute();
         
         if ($check->fetchColumn() > 0) {
-            return false; // Role is in use, cannot delete
+            return false; 
         }
         
         $stmt = $this->db->prepare("DELETE FROM roles WHERE id = :id");

@@ -77,12 +77,12 @@ $result = [
     ]
 ];
 
-// Если хотя бы один из сервисов недоступен, меняем статус на partial
+
 if (!$mnsData['available'] || !$justbelData['available']) {
     $result['status'] = 'partial';
 }
 
-// Если оба сервиса недоступны, меняем статус на error
+
 if (!$mnsData['available'] && !$justbelData['available']) {
     $result['status'] = 'error';
 }

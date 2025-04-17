@@ -229,8 +229,7 @@ $(document).ready(function() {
                             </li>
                         `);
                         
-                        // Добавляем номера страниц
-                        // При большом количестве страниц, показывать ограниченное число
+                      
                         const maxVisiblePages = 5;
                         let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
                         let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
@@ -306,7 +305,7 @@ $(document).ready(function() {
                             deleteReport(reportId);
                         });
                     } else {
-                        // Статус успешен, но в ответе ошибка
+                       
                         if (retryCount < maxRetries) {
                             retryCount++;
                             setTimeout(executeRequest, retryDelay * retryCount);
@@ -316,7 +315,7 @@ $(document).ready(function() {
                                 <button class="btn btn-sm btn-outline-primary ms-2 retry-button">Повторить</button>
                             </td></tr>`);
                             
-                            // Обработчик для кнопки повторной попытки
+                           
                             $('.retry-button').on('click', function() {
                                 retryCount = 0;
                                 loadReports(page, limit);
@@ -327,9 +326,9 @@ $(document).ready(function() {
                 error: function(xhr, status, error) {
                     console.error("AJAX error:", status, error);
                     
-                    // Проверяем тип ошибки
+                   
                     if (status === 'timeout') {
-                        // Ошибка таймаута
+                       
                         if (retryCount < maxRetries) {
                             retryCount++;
                             setTimeout(executeRequest, retryDelay * retryCount);
@@ -340,15 +339,14 @@ $(document).ready(function() {
                             </td></tr>`);
                         }
                     } else if (xhr.status === 401) {
-                        // Ошибка авторизации
+                       
                         $('#reports-table tbody').html(`<tr><td colspan="5" class="text-center text-danger">
                             Ошибка авторизации. Необходимо повторно войти в систему.
                         </td></tr>`);
                         
-                        // Можно добавить перенаправление на страницу входа
-                        // window.location.href = 'login.php';
+                       
                     } else if (xhr.status === 0) {
-                        // Ошибка соединения
+                      
                         if (retryCount < maxRetries) {
                             retryCount++;
                             setTimeout(executeRequest, retryDelay * retryCount);
@@ -359,7 +357,7 @@ $(document).ready(function() {
                             </td></tr>`);
                         }
                     } else {
-                        // Другие ошибки
+                       
                         if (retryCount < maxRetries) {
                             retryCount++;
                             setTimeout(executeRequest, retryDelay * retryCount);
@@ -371,7 +369,7 @@ $(document).ready(function() {
                         }
                     }
                     
-                    // Общий обработчик для кнопки повторной попытки
+                   
                     $('.retry-button').on('click', function() {
                         retryCount = 0;
                         loadReports(page, limit);
@@ -380,7 +378,7 @@ $(document).ready(function() {
             });
         }
         
-        // Запускаем запрос
+        
         executeRequest();
     }
     
@@ -393,7 +391,7 @@ $(document).ready(function() {
             return;
         }
         
-        // Сохраняем ID отчета в переменной
+        
         currentReportId = reportId;
         
         // Очищаем содержимое модального окна и показываем индикатор загрузки
@@ -581,7 +579,7 @@ $(document).ready(function() {
                 error: function(xhr, status, error) {
                     let errorMessage = 'Ошибка при загрузке отчета';
                     
-                    // Если это не последняя попытка, пробуем еще раз
+                  
                     if (retryCount < 2) {
                         console.log('Попытка ' + (retryCount + 1) + ' не удалась. Повторная попытка через ' + delay + 'мс...');
                         
@@ -591,12 +589,12 @@ $(document).ready(function() {
                         return;
                     }
                     
-                    // Обработка различных типов ошибок
+                   
                     if (status === 'timeout') {
                         errorMessage = 'Превышено время ожидания ответа от сервера';
                     } else if (xhr.status === 401) {
                         errorMessage = 'Ошибка авторизации. Пожалуйста, войдите в систему заново.';
-                        // Перенаправляем на страницу входа
+                       
                         setTimeout(function() {
                             window.location.href = 'login.php';
                         }, 2000);
@@ -610,7 +608,7 @@ $(document).ready(function() {
                         errorMessage = xhr.responseJSON.message;
                     }
                     
-                    // Показываем сообщение об ошибке и кнопку для повторной попытки
+                    
                     $('#report-content').html('<div class="alert alert-danger">' +
                         '<p>' + errorMessage + '</p>' +
                         '<button type="button" class="btn btn-primary mt-2" onclick="viewReport(' + reportId + ')">' +
@@ -620,7 +618,7 @@ $(document).ready(function() {
             });
         }
         
-        // Запускаем выполнение запроса
+       
         executeRequest();
     }
     
@@ -636,7 +634,7 @@ $(document).ready(function() {
             return;
         }
         
-        // Выполняем запрос к API
+       
         $.ajax({
             url: 'api/reports.php?id=' + reportId,
             type: 'DELETE',
@@ -648,7 +646,7 @@ $(document).ready(function() {
                     // Перезагружаем список отчетов
                     loadReports(1);
                     
-                    // Показываем сообщение об успешном удалении
+                    
                     showMessage('success', 'Отчет успешно удален');
                 } else {
                     showMessage('error', 'Ошибка при удалении отчета: ' + response.message);
@@ -729,11 +727,11 @@ $(document).ready(function() {
             headers: { 'Authorization': 'Bearer ' + getToken() },
             data: JSON.stringify({ report_id: reportId }),
             success: function(response) {
-                // Скрываем индикатор загрузки
+               
                 $('#loading').addClass('d-none');
                 
                 if (response.status === 'success') {
-                    // Создаем ссылку для скачивания файла
+                  
                     const downloadUrl = response.download_url;
                     
                     // Скачиваем файл
@@ -750,10 +748,10 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr) {
-                // Скрываем индикатор загрузки
+                
                 $('#loading').addClass('d-none');
                 
-                // Показываем ошибку
+               
                 let errorMessage = 'Ошибка при формировании отчета';
                 
                 if (xhr.responseJSON && xhr.responseJSON.message) {

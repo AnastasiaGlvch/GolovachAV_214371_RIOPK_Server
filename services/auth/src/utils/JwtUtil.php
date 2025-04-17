@@ -30,7 +30,7 @@ class JwtUtil {
                 return false;
             }
             
-            // Check if token is expired
+           
             if ($decoded['exp'] < time()) {
                 return false;
             }

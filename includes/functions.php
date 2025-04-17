@@ -36,15 +36,13 @@ function validateToken($token) {
     // Увеличиваем счетчик запросов
     $requestCounter++;
     
-    // Если токен был недавно проверен и успешно валидирован, используем кешированные данные
-    // для предотвращения перегрузки сервиса авторизации при быстрых последовательных запросах
+    
     if (isset($cachedUsers[$cacheKey])) {
         $currentTime = time();
         $lastChecked = isset($lastValidationTime[$cacheKey]) ? $lastValidationTime[$cacheKey] : 0;
         $timeDiff = $currentTime - $lastChecked;
         
-        // Если токен был проверен менее 60 секунд назад или это быстрый последовательный запрос,
-        // используем кеш без обращения к сервису авторизации
+       
         if ($timeDiff < 60 || $requestCounter % 5 !== 0) {
             // Проверяем локально срок действия токена
             $tokenParts = explode('.', $token);
@@ -77,10 +75,7 @@ function validateToken($token) {
         return false;
     }
     
-    // Теперь делаем проверку через API, только если:
-    // 1. Это первая проверка токена
-    // 2. Прошло более 60 секунд с последней проверки
-    // 3. Каждый 5-й запрос для периодической валидации
+  
     
     $isFirstCheck = !isset($cachedUsers[$cacheKey]);
     $isTimeToRevalidate = isset($lastValidationTime[$cacheKey]) && (time() - $lastValidationTime[$cacheKey] > 60);
@@ -149,7 +144,7 @@ function validateToken($token) {
         return $cachedUsers[$cacheKey];
     }
     
-    // Если нет кешированных данных, но токен кажется валидным по структуре и времени
+   
     if (isset($payload['user'])) {
         // Кешируем результат
         $cachedUsers[$cacheKey] = $payload['user'];
@@ -472,7 +467,7 @@ function getUserFromAuthService($userId) {
     
     $context = stream_context_create($options);
     
-    // Отключаем вывод ошибок в поток вывода
+   
     $previousErrorReporting = error_reporting(0);
     $result = @file_get_contents($url, false, $context);
     error_reporting($previousErrorReporting);
@@ -482,7 +477,7 @@ function getUserFromAuthService($userId) {
         error_log("Ошибка при получении данных пользователя ID " . $userId . ": " . 
                  (isset($error['message']) ? $error['message'] : 'Неизвестная ошибка'));
         
-        // Попробуем использовать резервный подход - получаем данные из локальной БД
+       
         try {
             $db = connectDB();
             $sql = "SELECT user_id FROM reports WHERE user_id = :user_id LIMIT 1";
@@ -491,11 +486,11 @@ function getUserFromAuthService($userId) {
             $stmt->execute();
             
             if ($stmt->rowCount() > 0) {
-                // Пользователь существует в нашей БД отчетов, создаем минимальную запись
+               
                 $basicUserData = [
                     'id' => $userId,
                     'username' => 'User_' . $userId,
-                    'role' => 'analyst' // Предполагаем базовую роль
+                    'role' => 'analyst' 
                 ];
                 
                 // Сохраняем в кеш
@@ -578,13 +573,13 @@ function getAllReports($limit = 10, $offset = 0, $search = '') {
         $whereClause = "1=1";
         $params = [];
         
-        // Добавляем условие поиска, если указан параметр search
+       
         if (!empty($search)) {
             $whereClause .= " AND r.unp LIKE :search";
             $params[':search'] = '%' . $search . '%';
         }
         
-        // Сначала получаем общее количество записей
+       
         $countSql = "SELECT COUNT(*) FROM reports r WHERE $whereClause";
         $countStmt = $db->prepare($countSql);
         foreach ($params as $key => $value) {
@@ -610,12 +605,12 @@ function getAllReports($limit = 10, $offset = 0, $search = '') {
         
         $reports = $stmt->fetchAll();
         
-        // Если отчеты найдены, дополним информацией о пользователях
+        
         if (!empty($reports)) {
-            // Получаем уникальные ID пользователей
+           
             $userIds = array_unique(array_column($reports, 'user_id'));
             
-            // Получаем информацию о каждом пользователе
+           
             $users = [];
             foreach ($userIds as $userId) {
                 $user = getUserFromAuthService($userId);

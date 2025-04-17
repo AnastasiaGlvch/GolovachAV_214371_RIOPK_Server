@@ -15,7 +15,6 @@ class AuthController {
         // Get posted data
         $data = json_decode(file_get_contents("php://input"), true);
         
-        // Check if username and password are provided
         if (!isset($data['username']) || !isset($data['password'])) {
             ResponseUtil::error('Username and password are required');
         }
@@ -23,19 +22,19 @@ class AuthController {
         $username = $data['username'];
         $password = $data['password'];
         
-        // Validate credentials
+        
         if (!$this->userModel->validateCredentials($username, $password)) {
             ResponseUtil::unauthorized('Invalid username or password');
         }
         
-        // Get user data for token generation
+        
         $user = $this->userModel->getByUsername($username);
         
         if (!$user['active']) {
             ResponseUtil::unauthorized('Account is inactive');
         }
         
-        // Generate token
+        
         $token = JwtUtil::generateToken($user);
         
         ResponseUtil::success([
@@ -50,11 +49,11 @@ class AuthController {
     }
     
     public function validateToken() {
-        // Get authorization header
+       
         $headers = getallheaders();
         $authHeader = isset($headers['Authorization']) ? $headers['Authorization'] : '';
         
-        // Check if token is provided
+        
         if (empty($authHeader) || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
             ResponseUtil::unauthorized('Token not provided');
         }
@@ -72,11 +71,11 @@ class AuthController {
     }
     
     public function refreshToken() {
-        // Get authorization header
+        
         $headers = getallheaders();
         $authHeader = isset($headers['Authorization']) ? $headers['Authorization'] : '';
         
-        // Check if token is provided
+        
         if (empty($authHeader) || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
             ResponseUtil::unauthorized('Token not provided');
         }
@@ -88,7 +87,7 @@ class AuthController {
             ResponseUtil::unauthorized('Invalid or expired token');
         }
         
-        // Get fresh user data
+        
         $user = $this->userModel->getById($userData['id']);
         
         if (!$user) {
@@ -99,7 +98,7 @@ class AuthController {
             ResponseUtil::unauthorized('Account is inactive');
         }
         
-        // Generate new token
+       
         $newToken = JwtUtil::generateToken($user);
         
         ResponseUtil::success([

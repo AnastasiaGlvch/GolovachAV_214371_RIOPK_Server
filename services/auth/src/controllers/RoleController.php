@@ -12,7 +12,7 @@ class RoleController {
     }
     
     public function getAll() {
-        // Anyone with a valid token can see roles
+        
         $authMiddleware = new AuthMiddleware();
         $currentUser = $authMiddleware->authorize();
         
@@ -21,7 +21,7 @@ class RoleController {
     }
     
     public function getById($id) {
-        // Anyone with a valid token can see roles
+     
         $authMiddleware = new AuthMiddleware();
         $currentUser = $authMiddleware->authorize();
         
@@ -35,25 +35,25 @@ class RoleController {
     }
     
     public function create() {
-        // Only administrators can create roles
+       
         $authMiddleware = new AuthMiddleware();
         $currentUser = $authMiddleware->authorize(['administrator']);
         
-        // Get posted data
+      
         $data = json_decode(file_get_contents("php://input"), true);
         
-        // Validate required fields
+       
         if (!isset($data['name']) || empty($data['name'])) {
             ResponseUtil::error('Role name is required', 400);
         }
         
-        // Check if role with this name already exists
+        
         $existingRole = $this->roleModel->getByName($data['name']);
         if ($existingRole) {
             ResponseUtil::error('Role with this name already exists', 400);
         }
         
-        // Create role
+       
         $result = $this->roleModel->create($data['name']);
         
         if (!$result) {
@@ -65,31 +65,31 @@ class RoleController {
     }
     
     public function update($id) {
-        // Only administrators can update roles
+       
         $authMiddleware = new AuthMiddleware();
         $currentUser = $authMiddleware->authorize(['administrator']);
         
-        // Get posted data
+      
         $data = json_decode(file_get_contents("php://input"), true);
         
-        // Validate required fields
+     
         if (!isset($data['name']) || empty($data['name'])) {
             ResponseUtil::error('Role name is required', 400);
         }
         
-        // Check if role exists
+       
         $role = $this->roleModel->getById($id);
         if (!$role) {
             ResponseUtil::notFound('Role not found');
         }
         
-        // Check if role with this name already exists
+      
         $existingRole = $this->roleModel->getByName($data['name']);
         if ($existingRole && $existingRole['id'] != $id) {
             ResponseUtil::error('Role with this name already exists', 400);
         }
         
-        // Update role
+       
         $result = $this->roleModel->update($id, $data['name']);
         
         if (!$result) {
@@ -101,17 +101,17 @@ class RoleController {
     }
     
     public function delete($id) {
-        // Only administrators can delete roles
+       
         $authMiddleware = new AuthMiddleware();
         $currentUser = $authMiddleware->authorize(['administrator']);
         
-        // Check if role exists
+      
         $role = $this->roleModel->getById($id);
         if (!$role) {
             ResponseUtil::notFound('Role not found');
         }
         
-        // Delete role
+        
         $result = $this->roleModel->delete($id);
         
         if ($result === false) {

@@ -45,7 +45,7 @@ class User {
 
     public function create($username, $password, $email, $role_id) {
         try {
-            // Проверка, существует ли пользователь с таким именем
+           
             $checkUser = $this->getByUsername($username);
             if ($checkUser) {
                 throw new PDOException("Пользователь с именем '{$username}' уже существует");
@@ -65,17 +65,17 @@ class User {
             
             return $stmt->execute();
         } catch (PDOException $e) {
-            // Записываем ошибку в лог
+            
             error_log("Ошибка при создании пользователя: " . $e->getMessage());
             
-            // Проверяем, связана ли ошибка с дублированием имени пользователя
+           
             if (strpos($e->getMessage(), "Дублирующаяся запись") !== false || 
                 strpos($e->getMessage(), "Duplicate entry") !== false ||
                 strpos($e->getMessage(), "уже существует") !== false) {
                 throw new PDOException("Пользователь с таким именем уже существует");
             }
             
-            // Пробрасываем ошибку дальше
+           
             throw $e;
         }
     }

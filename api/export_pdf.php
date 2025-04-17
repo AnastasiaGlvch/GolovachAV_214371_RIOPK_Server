@@ -218,19 +218,19 @@ if ($reportData['reliability_rating']) {
     $score = $rating['score'];
     $level = $rating['level'];
     
-    // Определение цвета в зависимости от уровня
+    
     $levelText = '';
     $levelColor = '';
     
     if ($level === 'high') {
         $levelText = 'Высокий';
-        $levelColor = '0,128,0'; // Зеленый
+        $levelColor = '0,128,0'; 
     } elseif ($level === 'medium') {
         $levelText = 'Средний';
-        $levelColor = '255,165,0'; // Оранжевый
+        $levelColor = '255,165,0';
     } else {
         $levelText = 'Низкий';
-        $levelColor = '255,0,0'; // Красный
+        $levelColor = '255,0,0';
     }
     
     $pdf->Write(0, 'Итоговый рейтинг: ' . $score . ' / 100 (' . $levelText . ')', '', 0, 'L', true);
@@ -252,11 +252,11 @@ if ($reportData['reliability_rating']) {
             $factorWeight = $factor['weight'];
             
             // Определение цвета оценки
-            $scoreColor = '255,0,0'; // По умолчанию красный
+            $scoreColor = '255,0,0'; 
             if ($factorScore >= 80) {
-                $scoreColor = '0,128,0'; // Зеленый
+                $scoreColor = '0,128,0'; 
             } elseif ($factorScore >= 50) {
-                $scoreColor = '255,165,0'; // Оранжевый
+                $scoreColor = '255,165,0'; 
             }
             
             $html .= '
@@ -359,7 +359,7 @@ $pdf->Write(0, 'Отчет сформирован ' . date('d.m.Y H:i:s') . ' п
 // Сохранение PDF
 $pdfFileName = 'report_' . $unp . '_' . date('Ymd_His') . '.pdf';
 
-// Создаем абсолютный путь к директории tmp
+
 $tmpDir = __DIR__ . '/../tmp';
 
 // Создаем директорию tmp, если она не существует
@@ -370,8 +370,7 @@ if (!file_exists($tmpDir)) {
 // Полный путь к файлу PDF
 $pdfFilePath = $tmpDir . '/' . $pdfFileName;
 
-// Настраиваем TCPDF, чтобы избежать проблем с open_basedir
-// Сохраняем PDF файл
+
 $pdf->Output($pdfFilePath, 'F');
 
 // Возвращаем результат
