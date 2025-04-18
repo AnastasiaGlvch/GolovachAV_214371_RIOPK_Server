@@ -230,7 +230,7 @@ $(document).ready(function() {
             return;
         }
         
-        // Очищаем список ролей
+       
         $('#role_id').empty();
         
         // Выполняем запрос к API
@@ -353,7 +353,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if (response.status === 'success') {
-                    // Перезагружаем список пользователей
+                   
                     loadUsers();
                     
                     // Показываем сообщение об успешном удалении

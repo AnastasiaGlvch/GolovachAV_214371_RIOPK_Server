@@ -77,7 +77,7 @@ include 'templates/header.php';
             </div>
             <div class="modal-body">
                 <div id="report-content">
-                    <!-- Содержимое отчета будет загружено через AJAX -->
+             
                 </div>
                 <!-- Индикатор загрузки -->
                 <div id="loading" class="text-center d-none py-5">
@@ -92,10 +92,7 @@ include 'templates/header.php';
                 <button type="button" class="btn btn-success rounded-pill" id="export-pdf-modal-button">
                     <i class="fas fa-file-pdf me-2"></i> Экспорт в PDF
                 </button>
-                <!-- Кнопка экспорта в Excel отключена из-за проблем с функциональностью -->
-                <!-- <button type="button" class="btn btn-primary rounded-pill" id="export-excel-modal-button">
-                    <i class="fas fa-file-excel me-2"></i> Экспорт в Excel
-                </button> -->
+              
             </div>
         </div>
     </div>
@@ -394,7 +391,7 @@ $(document).ready(function() {
         
         currentReportId = reportId;
         
-        // Очищаем содержимое модального окна и показываем индикатор загрузки
+       
         $('#report-content').html('<div class="text-center"><div class="spinner-border" role="status"></div></div>');
         
         // Открываем модальное окно

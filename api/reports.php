@@ -24,12 +24,12 @@ if (isset($headers['Authorization'])) {
             break; // Успешная валидация
         }
         
-        // Если не удалось валидировать, ждем немного и пробуем снова
+        
         if ($retryCount < $maxRetries) {
             usleep(100000); // 100 миллисекунд
             $retryCount++;
         } else {
-            // Исчерпаны все попытки
+           
             http_response_code(401);
             echo json_encode(['status' => 'error', 'message' => 'Неверный токен авторизации']);
             exit;
@@ -41,7 +41,6 @@ if (isset($headers['Authorization'])) {
     exit;
 }
 
-// Дополнительная проверка после всех попыток
 if (!$user) {
     http_response_code(401);
     echo json_encode(['status' => 'error', 'message' => 'Неверный токен авторизации']);
